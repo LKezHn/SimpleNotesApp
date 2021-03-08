@@ -10,11 +10,8 @@ function UserState(props){
 
   const initialState = {
     notes: [],
-    numberOfNotes: 0,
-    lastNote: "",
     selectedNote: {},
     modalStatus: false,
-    isAuth: false
   }
 
   const [state, dispatch] = useReducer(NotesReducer, initialState)
@@ -72,10 +69,6 @@ function UserState(props){
     })
   }
 
-  const getNumberOfNotes = () => {
-
-  }
-
   const setSelectedNoteContent = (content) =>{
     dispatch({
       type: 'SET_NOTE_CONTENT',
@@ -84,21 +77,13 @@ function UserState(props){
     )
   }
 
-  const getLastNote = () => {
-
-  }
-
   return(
     <NotesContext.Provider value={{
       notes: state.notes,
-      numberOfNotes: state.numberOfNotes,
-      lastNote: state.lastNote,
       selectedNote: state.selectedNote,
       modalStatus: state.modalStatus,
       getNotes,
       clearNotes,
-      getLastNote,
-      getNumberOfNotes,
       openModal,
       closeModal,
       setSelectedNote,

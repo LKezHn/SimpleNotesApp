@@ -7,7 +7,7 @@ const router = express.Router();
 const User = require('../models/User.js');
 const Note = require('../models/Note.js');
 const config = require('../config.js');
-const verifyToken = require('../controllers/verifyrToken.js');
+const verifyToken = require('../middlewares/verifyrToken.js');
 
 
 router.post('/verifyToken', verifyToken, function (req, res, next) {
