@@ -15,8 +15,14 @@ const groupSchema = new Schema({
     type: Schema.Types.ObjectId
   }],
   notes: [{
-    ref: "Note",
-    type: Schema.Types.ObjectId
+    note:{
+      ref: "GroupNote",
+      type: Schema.Types.ObjectId
+    },
+    author: {
+      ref: "User",
+      type: Schema.Types.ObjectId
+    }
   }]
 })
 

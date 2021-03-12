@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { userIsAuth, signUp, login, getUserInfo } = require('../controllers/user.controller')
 const { createNote, getAllNotes, getNote, updateNote, deleteNote } = require('../controllers/note.controller');
-const { createGroup, joinGroup, getGroups } = require('../controllers/group.controller')
+const { createGroup, joinGroup, getGroups, addNote, getUserGroups } = require('../controllers/group.controller')
 
 const verifyToken = require('../middlewares/verifyrToken.js');
 
@@ -46,6 +46,10 @@ router.post('/newGroup', verifyToken, createGroup)
 router.post('/joinGroup', verifyToken, joinGroup)
 // Get all the groups
 router.get('/groups', verifyToken, getGroups)
+// Add note to group
+router.post('/groups/:id/newNote', verifyToken, addNote)
+// Get user's groups
+router.get("/getGroups", verifyToken, getUserGroups)
 
 module.exports = router
 
