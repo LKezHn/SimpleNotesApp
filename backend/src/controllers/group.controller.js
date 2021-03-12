@@ -53,7 +53,7 @@ async function getGroups(req, res){
 async function addNote(req, res){
 
   const { noteTitle, noteDescription } = req.body
-  const group = await Group.find({code: req.params.id}, { password: 0 })
+  const group = await Group.find({code: req.params.id})
 
   if(!group){
     return res.status(400).send({message: "Group doesn't exists"})
@@ -66,7 +66,9 @@ async function addNote(req, res){
   })
   await note.save()
   
-  await Group.updateOne({_id: group._id},{
+  console.log(note._id)
+
+  await Group.updateOne({code: req.params.id},{
     $addToSet:{
       notes: note._id
     }
@@ -81,6 +83,21 @@ async function getUserGroups(req, res){
   res.status(200).send(groups)
 }
 
+async function getGroupNotes(req, res){
+  const group = await Group.find({ code: req.params.id }, { code: 0, members: 0, name: 0 }).populate({
+    path: 'notes',
+    populate: {
+      path: 'author',
+      select: {
+        password: 0,
+        notes: 0,
+        email: 0
+      }
+    }
+  })
+  res.status(200).send(group[0].notes)
+}
+
 module.exports = {
-  createGroup, joinGroup, getGroups, addNote, getUserGroups
+  createGroup, joinGroup, getGroups, addNote, getUserGroups, getGroupNotes
 }
