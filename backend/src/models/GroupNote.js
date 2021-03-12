@@ -18,4 +18,4 @@ const groupNoteSchema = new Schema({
   timestamps: true
 })
 
-module.exports = model('groupNote', groupNoteSchema);
+module.exports = model('GroupNote', groupNoteSchema);
