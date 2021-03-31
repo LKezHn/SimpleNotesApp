@@ -14,7 +14,7 @@ function UserState(props){
     modalStatus: false,
     modalJoinStatus: false,
     modalCreateStatus: false,
-    modalGroupStatus: false
+    modalGroupStatus: false,
   }
 
   const [state, dispatch] = useReducer(NotesReducer, initialState)
