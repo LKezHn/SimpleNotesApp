@@ -12,3 +12,5 @@ Download the project and run the next commands:
     $ cd ..; cd frontend
     $ npm i
 ```
+
+## End Points
