@@ -1,13 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+
 import GroupModalWindow from '../GroupModalWindow';
 import JoinModal from '../JoinModal'
+import CreateGroupModal from '../CreateGroupModal';
 
 import NotesContext from '../../context/Notes/NotesContext';
 
 function Groups() {
 
-  const { openGroupModal, openJoinModal } = useContext(NotesContext);
+  const { openGroupModal, openJoinModal, openCreateModal } = useContext(NotesContext);
 
   const apiUri = 'http://localhost:4000/api/v1/groups';
   const token = localStorage.getItem('token');
@@ -15,6 +17,11 @@ function Groups() {
   const [groupList, setGroupList] = useState([])
 
   useEffect(() => {
+    getGroups()
+  }, [])
+
+
+  const getGroups = () => {
     axios.get(apiUri, {
       headers: {
         'x-access-token': token
@@ -24,7 +31,7 @@ function Groups() {
     ).catch(
       err => console.error(err)
     )
-  }, [])
+  }
 
   const open = (e) => {
     e.preventDefault()
@@ -35,6 +42,10 @@ function Groups() {
     openJoinModal()
   }
 
+  const createGroupModal = () => {
+    openCreateModal()
+  }
+
   return (
     <div className='lg:w-1/5 mx-1'>
       <div className='bg-purple-500 rounded'>
@@ -43,16 +54,17 @@ function Groups() {
       {
         groupList.length > 0 && groupList.map((group) => (
           <div key={group._id} onClick={open} className='mx-2 my-1 py-1 px-4 rounded border border-purple-600 bg-gray-100 cursor-pointer text-left'>
-            <span className='text-sm font-normal text-purple-900'>{group.name}</span><br/>
+            <span className='text-sm font-normal text-purple-900'>{group.name}</span><br />
             <span className='text-xs font-light text-gray-600'>{group.code}</span>
-            <GroupModalWindow  id={group.code}/>
+            <GroupModalWindow id={group.code} />
           </div>
         ))
       }
-      { groupList.length == 0 && <p className=' text-center font-medium text-purple-500 '>You have not any group.</p>} 
+      { groupList.length == 0 && <p className=' text-center font-medium text-purple-500 '>You have not any group.</p>}
       <p className='px-2 text-purple-600 text-center text-sm cursor-pointer' onClick={joinModal}>Join to a group</p>
-      <JoinModal />
-      {/* <p className='px-2 text-purple-600 text-center text-sm cursor-pointer' onClick={createGroupModal}>Create a group</p> */}
+      <JoinModal get={getGroups} />
+      <p className='px-2 text-purple-600 text-center text-sm cursor-pointer' onClick={createGroupModal}>Create a group</p>
+      <CreateGroupModal get={getGroups} />
     </div>
   )
 }

@@ -79,8 +79,11 @@ export default function ModalWindow(){
           onChange={setContent} />
       </form>
       <button
-        className='rounded bg-purple-500 text-white px-3 py-1 mx-auto hover:bg-purple-600'
+        className='rounded bg-purple-500 text-white mx-2 px-3 py-1 hover:bg-purple-600'
         onClick={handleSaveNote}>Save</button>
+      <button
+        className='rounded bg-red-500 text-white px-3 py-1 mx-auto hover:bg-red-600'
+        onClick={closeModal}>Cancel</button>
     </Modal>
   )
 
