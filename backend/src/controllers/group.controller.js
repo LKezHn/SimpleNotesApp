@@ -28,18 +28,20 @@ async function createGroup(req, res){
 }
 
 async function joinGroup(req, res){
-  const { code } = req.body
-  const group = Group.find({code: code})
+  const group = Group.find({code: req.params.code})
 
+  console.log(req.userID)
   if(!group){
     return res.status(400).send({message: "Group doesn't exists"})
   }
 
-  await Group.updateOne({ _id: group._id},{
+  const resp = await Group.updateOne({ code: req.params.code},{
     $addToSet: {
       members: req.userID
     }
   })
+
+  console.log(resp)
 
   res.status(200).send({message: 'User joined'})
 }
@@ -68,7 +70,6 @@ async function getGroupInfo(req, res){
     res.status(400).send({ message: "Group don't exists"})
   }
 
-  console.log(group)
   return res.status(200).send(group[0])
 }
 
@@ -88,8 +89,6 @@ async function addNote(req, res){
   })
   await note.save()
   
-  console.log(note._id)
-
   await Group.updateOne({code: req.params.id},{
     $addToSet:{
       notes: note._id
@@ -101,7 +100,7 @@ async function addNote(req, res){
 }
 
 async function getUserGroups(req, res){
-  const groups = await Group.find({ members: [ req.userID]}, { name: 1, code: 1 })
+  const groups = await Group.find({ members: { $in: [ req.userID ]} }, { name: 1, code: 1 })
   res.status(200).send(groups)
 }
 

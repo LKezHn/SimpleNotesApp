@@ -45,7 +45,7 @@ router.delete('/notes/:id', verifyToken, deleteNote)
 // Create a new group
 router.post('/groups/new', verifyToken, createGroup)
 // Join to a group
-router.post('/groups/join', verifyToken, joinGroup)
+router.post('/groups/:code/join', verifyToken, joinGroup)
 //Get all the groups
 router.get('/groups/:id', verifyToken, getGroupInfo)
 // Add note to group
