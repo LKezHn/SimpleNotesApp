@@ -52,6 +52,17 @@ async function getUserInfo(req, res, next) {
   res.status(200).send(user);
 }
 
+async function updateUserInfo(req, res){
+  const { user, email } = req.body
+
+  await User.findOneAndUpdate({ _id: req.userID},{
+    user,
+    email
+  })
+
+  res.status(200).send({message: 'Info updated'})
+}
+
 module.exports = {
-  userIsAuth, signUp, login, getUserInfo
+  userIsAuth, signUp, login, getUserInfo, updateUserInfo
 }

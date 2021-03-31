@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { userIsAuth, signUp, login, getUserInfo } = require('../controllers/user.controller')
+const { userIsAuth, signUp, login, getUserInfo, updateUserInfo } = require('../controllers/user.controller')
 const { createNote, getAllNotes, getNote, updateNote, deleteNote } = require('../controllers/note.controller');
 const { createGroup, joinGroup, getGroups, addNote, getUserGroups, getGroupNotes } = require('../controllers/group.controller')
 
@@ -20,6 +20,8 @@ router.post('/signup', signUp);
 router.get('/me', verifyToken, getUserInfo);
 // Auth of an registered user
 router.post('/login', login);
+// Update info of an user
+router.put('/me/edit', verifyToken, updateUserInfo)
 
 // -------------------------------------------------------------------------
 // Notes Routes
