@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import axios from 'axios';
-import ModalWindow from '../ModalWindow';
+import ModalWindow from '../ModalEditWindow';
 
 import NotesContext from '../../context/Notes/NotesContext';
 
@@ -31,7 +31,7 @@ function Note({content}){
 
   return(
     <div className='mx-2 my-1 py-1 px-4 rounded border border-purple-600 bg-gray-100 cursor-pointer text-left'>
-      <span className='text-sm font-light text-purple-900'>{ content.noteTitle.length <= 17 ? content.noteTitle :`${content.noteTitle.slice(0,17)}...`  }</span>
+      <span className='text-sm font-light text-purple-900'>{ content.noteTitle.length <= 17 ? content.noteTitle :`${content.noteTitle.slice(0,15)}...`  }</span>
       <div className='float-right'>
         <button className='text-purple-500 m-0 px-1 text-xs' onClick={open}>Edit</button>
         <button className='text-purple-500 m-0 px-1 text-md font-bold' onClick={ deleteNote }>x</button>
