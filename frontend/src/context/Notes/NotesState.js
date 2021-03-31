@@ -12,6 +12,9 @@ function UserState(props){
     notes: [],
     selectedNote: {},
     modalStatus: false,
+    modalJoinStatus: false,
+    modalCreateStatus: false,
+    modalGroupStatus: false
   }
 
   const [state, dispatch] = useReducer(NotesReducer, initialState)
@@ -62,9 +65,50 @@ function UserState(props){
     })
   }
 
+  const openGroupModal = () => {
+    dispatch({
+      type: 'OPEN_GROUP_MODAL',
+      payload: true
+    })
+  }
+
+  const openJoinModal = () => {
+    dispatch({
+      type: 'OPEN_JOIN_MODAL',
+      payload: true
+    })
+  }
+
+  const openCreateModal = () => {
+    dispatch({
+      type: 'OPEN_CREATE_MODAL',
+      payload: true
+    })
+  }
+
   const closeModal = () =>{
     dispatch({
       type: 'CLOSE_MODAL',
+      payload: false
+    })
+  }
+
+  const closeGroupModal = () =>{
+    dispatch({
+      type: 'CLOSE_GROUP_MODAL',
+      payload: false
+    })
+  }
+
+  const closeJoinModal = () =>{
+    dispatch({
+      type: 'CLOSE_JOIN_MODAL',
+      payload: false
+    })
+  }
+  const closeCreateModal = () =>{
+    dispatch({
+      type: 'CLOSE_CREATE_MODAL',
       payload: false
     })
   }
@@ -82,10 +126,19 @@ function UserState(props){
       notes: state.notes,
       selectedNote: state.selectedNote,
       modalStatus: state.modalStatus,
+      modalGroupStatus: state.modalGroupStatus,
+      modalJoinStatus: state.modalJoinStatus,
+      modalCreateStatus: state.modalCreateStatus,
       getNotes,
       clearNotes,
       openModal,
+      openGroupModal,
+      openJoinModal,
+      openCreateModal,
       closeModal,
+      closeGroupModal,
+      closeJoinModal,
+      closeCreateModal,
       setSelectedNote,
       setSelectedNoteContent
     }}>
