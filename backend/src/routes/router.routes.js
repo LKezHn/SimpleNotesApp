@@ -43,7 +43,7 @@ router.delete('/notes/:id', verifyToken, deleteNote)
 // -------------------------------------------------------------------------
 
 // Create a new group
-router.post('/gropus/new', verifyToken, createGroup)
+router.post('/groups/new', verifyToken, createGroup)
 // Join to a group
 router.post('/groups/join', verifyToken, joinGroup)
 //Get all the groups

@@ -29,7 +29,7 @@ async function createGroup(req, res){
 
 async function joinGroup(req, res){
   const { code } = req.body
-  const group = Group.find({code: code}, {password: 0})
+  const group = Group.find({code: code})
 
   if(!group){
     return res.status(400).send({message: "Group doesn't exists"})
