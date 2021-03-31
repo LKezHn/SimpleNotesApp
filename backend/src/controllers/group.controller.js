@@ -44,10 +44,32 @@ async function joinGroup(req, res){
   res.status(200).send({message: 'User joined'})
 }
 
-async function getGroups(req, res){
-  const groups = await Group.find(); 
+async function getGroupInfo(req, res){
   
-  return res.status(200).send(groups)
+  const group = await Group.find({ code: req.params.id }).populate({
+    path:'members',
+    select: {
+      username: 1
+    }
+  }
+    ).populate({
+    path: 'notes',
+    populate: {
+      path: 'author',
+      select: {
+        password: 0,
+        notes: 0,
+        email: 0
+      }
+    }
+  })
+
+  if(!group){
+    res.status(400).send({ message: "Group don't exists"})
+  }
+
+  console.log(group)
+  return res.status(200).send(group[0])
 }
 
 async function addNote(req, res){
@@ -79,12 +101,12 @@ async function addNote(req, res){
 }
 
 async function getUserGroups(req, res){
-  const groups = await Group.find({ members: [ req.userID]})
+  const groups = await Group.find({ members: [ req.userID]}, { name: 1, code: 1 })
   res.status(200).send(groups)
 }
 
 async function getGroupNotes(req, res){
-  const group = await Group.find({ code: req.params.id }, { code: 0, members: 0, name: 0 }).populate({
+  const group = await Group.find({ code: req.params.id }).populate('members').populate({
     path: 'notes',
     populate: {
       path: 'author',
@@ -110,5 +132,5 @@ async function changeGroupName(req, res){
 }
 
 module.exports = {
-  createGroup, joinGroup, getGroups, addNote, getUserGroups, getGroupNotes, changeGroupName
+  createGroup, joinGroup, getGroupInfo, addNote, getUserGroups, getGroupNotes, changeGroupName
 }
