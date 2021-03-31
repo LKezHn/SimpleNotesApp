@@ -9,7 +9,7 @@ async function createGroup(req, res){
   const user = User.findById(req.userID, { password: 0 })
 
   if(!user){
-    return res.status(400).send({message: "user doesn't exisits"})
+    return res.status(400).send({message: "user doesn't exists"})
   }
   const group = new Group({
     name,
@@ -98,6 +98,17 @@ async function getGroupNotes(req, res){
   res.status(200).send(group[0].notes)
 }
 
+async function changeGroupName(req, res){
+
+  const { groupName } = req.body 
+
+  await Group.findOneAndUpdate({ code: req.params.id }, {
+    name: groupName
+  })
+
+  res.status(200).send({ message: 'Name updated'})
+}
+
 module.exports = {
-  createGroup, joinGroup, getGroups, addNote, getUserGroups, getGroupNotes
+  createGroup, joinGroup, getGroups, addNote, getUserGroups, getGroupNotes, changeGroupName
 }
