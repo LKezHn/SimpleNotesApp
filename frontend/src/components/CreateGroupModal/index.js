@@ -47,7 +47,7 @@ function CreateGroupModal({ get }) {
         content: {
           backgroundColor: '#F3F4F6',
           border: '1px solid #7C3AED',
-          height: '35%',
+          height: '27%',
           width: '80%',
           margin: 'auto auto'
         }
@@ -56,7 +56,7 @@ function CreateGroupModal({ get }) {
         <h1 className='bg-purple-400 py-1 my-2 text-white text-center font-semibold rounded'>Create a Group</h1>
         <input type='text' value={groupName} onChange={handleGroupName} className='w-full bg-gray-300 text-purple-600 py-1 px-2' placeholder='Group Name' name='name' />
         <button type='button' onClick={createGroup} className='mx-2 bg-purple-500 text-white px-2 py-1 my-1 rounded'>Create</button>
-        <button type='button' onClick={close} className=' bg-red-500 text-white px-2 py-1 my-1 rounded'>Cancel</button>
+        <button type='button' onClick={close} className='hover:bg-red-600 bg-red-500 text-white px-2 py-1 my-1 rounded'>Cancel</button>
     </Modal>
   )
 }
