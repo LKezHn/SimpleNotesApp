@@ -4,7 +4,7 @@ const router = express.Router();
 
 const { userIsAuth, signUp, login, getUserInfo, updateUserInfo } = require('../controllers/user.controller')
 const { createNote, getAllNotes, getNote, updateNote, deleteNote } = require('../controllers/note.controller');
-const { createGroup, joinGroup, getGroupInfo, addNote, getUserGroups, getGroupNotes } = require('../controllers/group.controller')
+const { createGroup, joinGroup, deleteGroupNote, getGroupInfo, addNote, getUserGroups, getGroupNotes } = require('../controllers/group.controller')
 
 const verifyToken = require('../middlewares/verifyrToken.js');
 
@@ -54,6 +54,8 @@ router.post('/groups/:id/newNote', verifyToken, addNote)
 router.get('/groups/:id/notes', verifyToken, getGroupNotes)
 // Get user's groups
 router.get("/groups", verifyToken, getUserGroups)
+// Delete a group's note
+router.delete('/groups/:code/notes/:id', verifyToken, deleteGroupNote)
 
 module.exports = router
 

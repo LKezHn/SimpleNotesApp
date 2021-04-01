@@ -1,37 +1,37 @@
 import React, { useState, useContext } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
-import { useEffect } from 'react';
 
 import NotesContext from '../../context/Notes/NotesContext'
 
-function GroupModalWindow({ id }) {
+function GroupModalWindow() {
 
-  const { modalGroupStatus, closeGroupModal } = useContext(NotesContext);
+  const { setSelectedGroupInfo, selectedGroupMembers, selectedGroupNotes, selectedGroupInfo, modalGroupStatus, closeGroupModal } = useContext(NotesContext);
   const apiUri = 'http://localhost:4000/api/v1/groups';
   const token = localStorage.getItem('token');
 
-  const [groupInfo, setGroupInfo] = useState({})
-  const [members, setMembers] = useState([])
-  const [groupNotes, setGroupNotes] = useState([])
   const [newNote, setNewNote] = useState({ noteTitle: "", noteDescription: "" })
 
-
-  useEffect(() => {
-    setGroups(id, apiUri)
-  }, [])
-
   const setGroups = (id, apiUri) => {
-    axios.get(`${apiUri}/${id}`, {
+    axios.get(`${apiUri}/${selectedGroupInfo.code}`, {
       headers: {
         'x-access-token': token
       }
     }).then((res) => {
-      setGroupInfo(res.data)
-      setMembers(res.data.members)
-      setGroupNotes(res.data.notes)
+      setSelectedGroupInfo(res.data)
     }
     ).catch(err => console.error(err))
+  }
+
+  const deleteNote = (e) => {
+    e.preventDefault()
+    axios.delete(`${apiUri}/${selectedGroupInfo.code}/notes/${e.target.id}`,{
+      headers: {
+        'x-access-token': token
+      }
+    }).then( res => {
+      setGroups(selectedGroupInfo.code, apiUri)
+    }).catch( err => console.error(err))
   }
 
   const handleNewNote = (e) => {
@@ -41,13 +41,13 @@ function GroupModalWindow({ id }) {
   const addNewGroupNote = (e) => {
     e.preventDefault()
     console.log(newNote)
-    axios.post(`${apiUri}/${groupInfo.code}/newNote`, newNote, {
+    axios.post(`${apiUri}/${selectedGroupInfo.code}/newNote`, newNote, {
       headers: {
         'x-access-token': token
       }
     }).then((res) => {
       setNewNote({ noteTitle: "", noteDescription: "" })
-      setGroups(id, apiUri)
+      setGroups(selectedGroupInfo.code, apiUri)
     }
     ).catch(err => console.error(err))
   }
@@ -71,12 +71,12 @@ function GroupModalWindow({ id }) {
         }
       }}
     >
-      <button type='button' disabled className='text-center my-1 mr-0 px-2 py-1 bg-red-500 text-white rounded'>Press ESC to Exit</button>
-      <h1 className="text-xl text-center font-semibold text-purple-600">{groupInfo.name}</h1>
-      <p className='text-center text-md text-gray-600 font-medium'>Code: {groupInfo.code}</p>
+      <p className='text-center my-1 mr-0 px-2 py-1 bg-red-500 text-white rounded'>Press ESC to Exit</p>
+      <h1 className="text-xl text-center font-semibold text-purple-600">{selectedGroupInfo.name}</h1>
+      <p className='text-center text-md text-gray-600 font-medium'>Code: {selectedGroupInfo.code}</p>
       <div className='my-4 mx-2'>
         <h1 className='text-center bg-purple-400 text-white rounded'>Add a note</h1>
-        <form className='px-auto ustify-center'>
+        <form className='px-auto justify-center'>
           <input className='justify-center bg-gray-300 w-full px-3 py-1 my-2 text-purple-600' type='text' name='noteTitle' value={newNote.noteTitle} onChange={handleNewNote} placeholder='Note title' />
           <textarea
             placeholder='Note Description'
@@ -85,13 +85,13 @@ function GroupModalWindow({ id }) {
             onChange={handleNewNote}
             className='bg-gray-300 w-full h-24 px-3 py-1 text-purple-600 text-sm font-medium rounded resize-none' />
         </form>
-        <button type='button' onClick={addNewGroupNote} className='my-2 block text-sm bg-purple-500 text-white px-3 py-1 rounded mx-auto'>Add Note</button>
+        <button id={selectedGroupInfo.code} type='button' onClick={addNewGroupNote} className='my-2 block text-sm bg-purple-500 text-white px-3 py-1 rounded mx-auto'>Add Note</button>
       </div>
       <div className='flex flex-row'>
         <div className='w-1/4'>
-          <h1 className='bg-purple-400 text-white rounded m-1 text-center' onClick={() => console.log(groupNotes)}>Users</h1>
+          <h1 className='bg-purple-400 text-white rounded m-1 text-center' onClick={() => console.log(selectedGroupInfo)}>Users</h1>
           {
-            members.map((member) => (
+            selectedGroupMembers.map((member) => (
               <div className='bg-white border mx-2 my-1 border-purple-600 rounded text-gray-600 font-medium px-2' key={member._id}>{member.username}</div>
             ))
           }
@@ -99,10 +99,14 @@ function GroupModalWindow({ id }) {
         <div className='w-3/4'>
           <h1 className='bg-purple-400 text-white rounded m-1 text-center'>Notes</h1>
           {
-            groupNotes.length > 0 && groupNotes.map((note) => (
+            selectedGroupNotes.length > 0 && selectedGroupNotes.map((note) => (
               <div className='bg-white border mx-2 my-1 border-purple-600 rounded text-gray-600 font-medium px-2' key={note._id}>
+                <div className='float-right'>
+                  <button id={note._id} className='text-purple-500 m-0 px-1 text-md font-bold' onClick={deleteNote}>x</button>
+                </div>
                 <h1 className='text-purple-500 text-md'>{note.noteTitle}</h1>
-                <h3 className=' text-gray-600 text-sm font-light'>Author: {note.author.username}</h3>
+                <h1 className='text-purple-700 text-sm'>{note.noteDescription}</h1>
+                <h3 className=' text-gray-600 text-xs font-light'>Author: {note.author.username}</h3>
               </div>
             ))
           }

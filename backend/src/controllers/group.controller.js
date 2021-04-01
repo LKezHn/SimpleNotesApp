@@ -130,6 +130,20 @@ async function changeGroupName(req, res){
   res.status(200).send({ message: 'Name updated'})
 }
 
+async function deleteGroupNote(req, res) {
+  const noteToDelete = await GroupNote.findById({ _id: req.params.id }, { _id: 1 })
+  await GroupNote.deleteOne({ _id: noteToDelete._id })
+  await Group.updateOne({ code: req.params.code }, {
+    $pull: {
+      notes: {
+        $in: [noteToDelete._id]
+      }
+    }
+  })
+  
+  res.status(200).send({ message: 'Note deleted' })
+}
+
 module.exports = {
-  createGroup, joinGroup, getGroupInfo, addNote, getUserGroups, getGroupNotes, changeGroupName
+  createGroup, joinGroup, getGroupInfo, addNote, getUserGroups, getGroupNotes, changeGroupName, deleteGroupNote
 }
