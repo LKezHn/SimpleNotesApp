@@ -9,7 +9,11 @@ import {
           OPEN_GROUP_MODAL, 
           OPEN_JOIN_MODAL, 
           OPEN_MODAL, 
-          SET_NOTE_CONTENT } from '../types'
+          SET_NOTE_CONTENT, 
+          SET_GROUP_INFO,
+          SET_GROUP_MEMBERS,
+          SET_GROUP_NOTES,
+          SET_GROUP_CODE} from '../types'
 
 export default function (state, action) {
   const { payload, type } = action
@@ -19,6 +23,26 @@ export default function (state, action) {
       return {
         ...state,
         notes: payload
+      }
+    case SET_GROUP_CODE:
+      return {
+        ...state,
+        groupCode: payload
+      }
+    case SET_GROUP_INFO:
+      return {
+        ...state,
+        selectedGroupInfo: payload
+      }
+    case SET_GROUP_MEMBERS:
+      return {
+        ...state,
+        selectedGroupMembers: payload
+      }
+    case SET_GROUP_NOTES:
+      return {
+        ...state,
+        selectedGroupNotes: payload
       }
     case OPEN_MODAL:
       return{

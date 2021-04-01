@@ -15,6 +15,10 @@ function UserState(props){
     modalJoinStatus: false,
     modalCreateStatus: false,
     modalGroupStatus: false,
+    selectedGroupInfo: {},
+    selectedGroupMembers: [],
+    selectedGroupNotes: [],
+    groupCode: "",
   }
 
   const [state, dispatch] = useReducer(NotesReducer, initialState)
@@ -23,6 +27,13 @@ function UserState(props){
     dispatch({
       type: 'GET_NOTES',
       payload: []
+    })
+  }
+
+  const setGroupCode = (code) => {
+    dispatch({
+      type: 'SET_GROUP_CODE',
+      payload: code
     })
   }
 
@@ -95,6 +106,10 @@ function UserState(props){
 
   const closeGroupModal = () =>{
     dispatch({
+      type: 'SET_GROUP_INFO',
+      payload: ""
+    })
+    dispatch({
       type: 'CLOSE_GROUP_MODAL',
       payload: false
     })
@@ -110,6 +125,21 @@ function UserState(props){
     dispatch({
       type: 'CLOSE_CREATE_MODAL',
       payload: false
+    })
+  }
+
+  const setSelectedGroupInfo = (info) => {
+    dispatch({
+      type: 'SET_GROUP_INFO',
+      payload: info
+    })
+    dispatch({
+      type: 'SET_GROUP_MEMBERS',
+      payload: info.members
+    })
+    dispatch({
+      type: 'SET_GROUP_NOTES',
+      payload: info.notes
     })
   }
 
@@ -129,7 +159,13 @@ function UserState(props){
       modalGroupStatus: state.modalGroupStatus,
       modalJoinStatus: state.modalJoinStatus,
       modalCreateStatus: state.modalCreateStatus,
+      selectedGroupInfo: state.selectedGroupInfo,
+      selectedGroupMembers: state.selectedGroupMembers,
+      selectedGroupNotes: state.selectedGroupNotes,
+      groupCode: state.groupCode,
       getNotes,
+      setSelectedGroupInfo,
+      setGroupCode,
       clearNotes,
       openModal,
       openGroupModal,
