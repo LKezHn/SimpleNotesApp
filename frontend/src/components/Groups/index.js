@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-import GroupModalWindow from '../GroupModalWindow';
+import GroupItem from '../GroupItem'
 import JoinModal from '../JoinModal'
 import CreateGroupModal from '../CreateGroupModal';
 
@@ -9,7 +9,7 @@ import NotesContext from '../../context/Notes/NotesContext';
 
 function Groups() {
 
-  const { openGroupModal, openJoinModal, openCreateModal } = useContext(NotesContext);
+  const { openJoinModal, openCreateModal } = useContext(NotesContext);
 
   const apiUri = 'http://localhost:4000/api/v1/groups';
   const token = localStorage.getItem('token');
@@ -19,7 +19,6 @@ function Groups() {
   useEffect(() => {
     getGroups()
   }, [])
-
 
   const getGroups = () => {
     axios.get(apiUri, {
@@ -31,11 +30,6 @@ function Groups() {
     ).catch(
       err => console.error(err)
     )
-  }
-
-  const open = (e) => {
-    e.preventDefault()
-    openGroupModal()
   }
 
   const joinModal = () => {
@@ -53,17 +47,13 @@ function Groups() {
       </div>
       {
         groupList.length > 0 && groupList.map((group) => (
-          <div key={group._id} onClick={open} className='mx-2 my-1 py-1 px-4 rounded border border-purple-600 bg-gray-100 cursor-pointer text-left'>
-            <span className='text-sm font-normal text-purple-900'>{group.name}</span><br />
-            <span className='text-xs font-light text-gray-600'>{group.code}</span>
-            <GroupModalWindow id={group.code} />
-          </div>
+          <GroupItem key={group._id} group={group} />
         ))
       }
       { groupList.length == 0 && <p className=' text-center font-medium text-purple-500 '>You have not any group.</p>}
-      <p className='px-2 text-purple-600 text-center text-sm cursor-pointer' onClick={joinModal}>Join to a group</p>
+      <p className='px-2 text-purple-600 hover:text-purple-800 hover:underline text-center text-sm cursor-pointer' onClick={joinModal}>Join to a group</p>
       <JoinModal get={getGroups} />
-      <p className='px-2 text-purple-600 text-center text-sm cursor-pointer' onClick={createGroupModal}>Create a group</p>
+      <p className='px-2 text-purple-600 hover:underline hover:text-purple-800 text-center text-sm cursor-pointer' onClick={createGroupModal}>Create a group</p>
       <CreateGroupModal get={getGroups} />
     </div>
   )
