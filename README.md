@@ -1,4 +1,4 @@
-# Simple Notes App
+# Simple Notes App **(Archived)**
 @version 1.0.0
 
 A simple app to manage notes, using the **MERN stack** for this development
